@@ -28,27 +28,15 @@
   <div class="container mx-auto px-24 py-16">
     <h2 class="text-3xl font-bold text-center text-gray-900 mb-10">Popular Dishes</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Dish 1-->
+      <!-- Dish 1,2,3-->
+       {% for dish in dishes  %}
        <div class="bg-gradient-to-b from-orange-100 via-orange-50 to-white shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
-        <img src="{% static 'core/images/butterpaneer.jpg' %}" alt="Paneer Butter Masala" class="w-full h-48 object-cover">
-        <h3 class="text-2xl font-semibold text-gray-800 mt-4">Paneer Butter Masala</h3>
-        <p class="text-gray-600 mt-2">Creamy and rich, with a delightful blend of spices, perfect with naan or rice.</p>
+        <img src="{% static dish.image %}" alt="photo" class="w-full h-48 object-cover">
+        <h3 class="text-2xl font-semibold text-gray-800 mt-4">{{dish.name}}</h3>
+        <p class="text-gray-600 mt-2">{{dish.desc}}</p>
         <a href="#" class="inline-block bg-orange-500 text-white mt-4 px-4 py-2 rounded-full hover:bg-orange-600">Order Now</a>
        </div>
-       <!-- Dish 2-->
-        <div class="bg-gradient-to-b from-orange-100 via-orange-50 to-white shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
-        <img src="{% static 'core/images/salmonfishcurry.jpg' %}" alt="Salmon Fish Curry" class="w-full h-48 object-cover">
-        <h3 class="text-2xl font-semibold text-gray-800 mt-4">Salmon Fish Curry</h3>
-        <p class="text-gray-600 mt-2">Succulent salmon in creamy, spiced curry with a perfect balance of flavors.</p>
-        <a href="#" class="inline-block bg-orange-500 text-white mt-4 px-4 py-2 rounded-full hover:bg-orange-600">Order Now</a>
-       </div>
-       <!-- Dish 3-->
-        <div class="bg-gradient-to-b from-orange-100 via-orange-50 to-white shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
-        <img src="{% static 'core/images/butterchicken.jpg' %}" alt="Butter Chicken" class="w-full h-48 object-cover">
-        <h3 class="text-2xl font-semibold text-gray-800 mt-4">Butter Chicken</h3>
-        <p class="text-gray-600 mt-2">A royal dish with a creamy, nutty gravy that offers a rich, unforgettable taste.</p>
-        <a href="#" class="inline-block bg-orange-500 text-white mt-4 px-4 py-2 rounded-full hover:bg-orange-600">Order Now</a>
-       </div>
+       {% endfor %}
     </div>
   </div>
  </section>
@@ -63,7 +51,7 @@
         </p>
       </div>
       <div class="flex justify-center mt-10">
-        <img src="{% static 'core/images/pasta.png' %}" alt="Healthy Sushi" class="w-1/2">
+        <img src="{% static 'core/images/pasta.jpg' %}" alt="Healthy Sushi" class="w-1/2">
       </div>
     </div>
   </section>
