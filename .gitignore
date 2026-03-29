@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Virtual environment
+.venv/
+env/
+
+# Django
+db.sqlite3
+*/migrations/0*.py
+
+# Node (Tailwind)
+node_modules/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

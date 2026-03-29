@@ -1,3 +1,108 @@
 {% extends "core/base.html" %}
 {% load static %}
-{% block title %} Reservation {% endblock title %} 
+
+{% block title %}Reservation{% endblock title %}
+
+{% block hero %}
+<section class="bg-gradient-to-b from-orange-100 via-orange-50 to-white">
+  <div class="container mx-auto px-24 py-16 text-center">
+    <h1 class="text-4xl lg:text-5xl font-bold text-orange-500" style="font-family: 'Dancing Script', cursive;">
+      Reserve a Table
+    </h1>
+    <p class="mt-4 text-gray-600 text-lg">Book your spot and let us take care of the rest.</p>
+  </div>
+</section>
+{% endblock hero %}
+
+{% block maincontent %}
+<section class="bg-gradient-to-t from-orange-100 via-orange-50 to-white py-16">
+  <div class="container mx-auto px-6 lg:px-24 max-w-3xl">
+
+    <!-- Success / Error Messages -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="mb-6 px-6 py-4 rounded-lg text-center font-medium
+          {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Form Card -->
+    <div class="bg-white shadow-lg rounded-2xl p-8 lg:p-12">
+      <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <!-- Name & Email -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Full Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Phone & Guests -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Phone</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.phone.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Number of Guests</label>
+            {{ form.guests }}
+            {% if form.guests.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.guests.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Date</label>
+            {{ form.date }}
+            {% if form.date.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.date.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-1">Time Slot</label>
+            {{ form.time }}
+            {% if form.time.errors %}
+              <p class="text-red-500 text-sm mt-1">{{ form.time.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div class="mb-8">
+          <label class="block text-gray-700 font-medium mb-1">Special Requests <span class="text-gray-400 font-normal">(optional)</span></label>
+          {{ form.special_requests }}
+        </div>
+
+        <!-- Submit -->
+        <div class="text-center">
+          <button type="submit"
+            class="bg-orange-500 text-white px-10 py-3 rounded-full text-lg font-semibold shadow-md hover:bg-orange-600 transition duration-200">
+            Confirm Reservation →
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock maincontent %}

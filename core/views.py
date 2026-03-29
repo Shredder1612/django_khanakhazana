@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ReservationForm
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -33,9 +36,19 @@ def tracking(request):
   return render(request, "core/tracking.html")
 
 
-
 def reservation(request):
-  return render(request, "core/reservation.html")
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "🎉 Your table has been reserved! We'll see you soon.")
+            return redirect('reservation')
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = ReservationForm()
+
+    return render(request, 'core/reservation.html', {'form': form})
 
 
 
