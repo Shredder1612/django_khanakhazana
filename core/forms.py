@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reservation
+from .models import Reservation, ContactMessage
 import datetime
 
 class ReservationForm(forms.ModelForm):
@@ -44,3 +44,51 @@ class ReservationForm(forms.ModelForm):
                 'class': 'w-full border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400'
             }),
         }
+
+
+
+class ContactForm(forms.Form):
+    SUBJECT_CHOICES = [
+        ('', 'Select a subject'),
+        ('feedback', 'Feedback'),
+        ('complaint', 'Complaint'),
+        ('query', 'General Query'),
+        ('order', 'Order Issue'),
+        ('other', 'Other'),
+    ]
+
+    name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your full name',
+            'class': 'w-full border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400'
+        })
+    )
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'your@email.com',
+            'class': 'w-full border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400'
+        })
+    )
+
+    subject = forms.ChoiceField(
+        choices=SUBJECT_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'w-full border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white'
+        })
+    )
+
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Write your message here...',
+            'rows': 5,
+            'class': 'w-full border border-orange-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400'
+        })
+    )
+
+    def clean_subject(self):
+        subject = self.cleaned_data.get('subject')
+        if not subject:
+            raise forms.ValidationError("Please select a subject.")
+        return subject
