@@ -7,4 +7,4 @@ urlpatterns = [
     path("order-track/", views.tracking, name="tracking"),
     path("reservation/", views.reservation, name="reservation"),
     path("contact/", views.contact, name="contact"),
-]
+] 

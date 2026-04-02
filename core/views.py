@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ReservationForm, ContactForm
-from .models import Reservation, ContactMessage
+from .models import Reservation, ContactMessage, Category, MenuItem
 
 # Create your views here.
 def home(request):
@@ -28,7 +28,24 @@ def home(request):
 
 
 def menu(request):
-  return render(request, "core/menu.html") 
+  categories = Category.objects.prefetch_related('items').all()
+  selected_category = request.GET.get('category', '')
+  search_query = request.GET.get('search', '')
+
+  items = MenuItem.objects.filter(is_available=True).select_related('category')
+
+  if selected_category:
+    items = items.filter(category__slug=selected_category)
+
+  if search_query:
+    items = items.filter(name__icontains=search_query)
+
+  return render(request, 'core/menu.html', {
+      'categories': categories,
+      'items': items,
+      'selected_category': selected_category,
+      'search_query': search_query,
+    })
 
 
 

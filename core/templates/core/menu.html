@@ -1,3 +1,136 @@
 {% extends "core/base.html" %}
 {% load static %}
-{% block title %} Menu {% endblock title %} 
+
+{% block title %}Menu{% endblock title %}
+
+{% block hero %}
+<section class="bg-gradient-to-b from-orange-100 via-orange-50 to-white">
+  <div class="container mx-auto px-24 py-16 text-center">
+    <h1 class="text-4xl lg:text-5xl font-bold text-orange-500" style="font-family: 'Dancing Script', cursive;">
+      Our Menu
+    </h1>
+    <p class="mt-4 text-gray-600 text-lg">Fresh ingredients, traditional recipes, unforgettable taste.</p>
+
+    <!-- Search Bar -->
+    <form method="GET" action="{% url 'menu' %}" class="mt-8 flex justify-center">
+      <div class="flex w-full max-w-md">
+        <input
+          type="text"
+          name="search"
+          value="{{ search_query }}"
+          placeholder=" Search for a dish..."
+          class="w-full border border-orange-200 rounded-l-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white text-gray-700"
+        >
+        {% if selected_category %}
+          <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <button type="submit"
+          class="bg-orange-500 text-white px-6 py-3 rounded-r-full hover:bg-orange-600 transition duration-200 font-semibold">
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock hero %}
+
+{% block maincontent %}
+<section class="bg-gradient-to-t from-orange-100 via-orange-50 to-white py-16">
+  <div class="container mx-auto px-10">
+
+    <!-- Category Filter Tabs -->
+<div class="flex flex-wrap gap-3 mb-12 justify-center px-4">
+  <a href="{% url 'menu' %}{% if search_query %}?search={{ search_query }}{% endif %}"
+    class="px-6 py-3 rounded-full font-medium transition duration-200
+      {% if not selected_category %}bg-orange-500 text-white shadow-md{% else %}bg-white text-gray-600 border border-orange-200 hover:bg-orange-50{% endif %}">
+    All
+  </a>
+  {% for category in categories %}
+    <a href="?category={{ category.slug }}{% if search_query %}&search={{ search_query }}{% endif %}"
+      class="px-6 py-3 rounded-full font-medium transition duration-200
+        {% if selected_category == category.slug %}bg-orange-500 text-white shadow-md{% else %}bg-white text-gray-600 border border-orange-200 hover:bg-orange-50{% endif %}">
+      {{ category.name }}
+    </a>
+  {% endfor %}
+</div>
+
+   <br>
+
+    <!-- Results count -->
+    {% if search_query %}
+      <p class="text-gray-500 text-sm mb-6 text-center">
+        {{ items|length }} result{{ items|length|pluralize }} for "<span class="text-orange-500 font-medium">{{ search_query }}</span>"
+      </p>
+    {% endif %}
+
+    <br>
+
+    
+    <!-- Menu Grid -->
+{% if items %}
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {% for item in items %}
+      <div class="bg-gradient-to-b from-orange-100 via-orange-50 to-white shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
+
+        <!-- Image -->
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-48 object-cover">
+        {% else %}
+          <div class="w-full h-48 bg-orange-200 flex items-center justify-center">
+            <span class="text-orange-400 text-sm">No image</span>
+          </div>
+        {% endif %}
+
+        <!-- Veg / Non-veg badge -->
+        <span class="inline-block mt-3 text-xs font-semibold px-2 py-1 rounded-full
+          {% if item.is_veg %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+          {% if item.is_veg %}🟢 Veg{% else %}🔴 Non-veg{% endif %}
+        </span>
+
+        <!-- Name + Price -->
+        <div class="flex justify-between items-center mt-2">
+          <h3 class="text-xl font-semibold text-gray-800">{{ item.name }}</h3>
+          <span class="text-orange-500 font-bold">₹{{ item.price }}</span>
+        </div>
+
+        <!-- Description -->
+        {% if item.description %}
+          <p class="text-gray-600 mt-2 text-sm">{{ item.description }}</p>
+        {% endif %}
+
+        <!-- Category label -->
+        <p class="text-xs text-gray-400 mt-1">{{ item.category.name }}</p>
+
+        <!-- Add to Cart -->
+        <button
+          onclick="addToCart({{ item.id }}, '{{ item.name }}', {{ item.price }})"
+          class="block bg-orange-500 text-white mt-4 mx-auto px-4 py-2 rounded-full hover:bg-orange-600 transition duration-200 font-medium">
+          Add to Cart +
+        </button>
+
+      </div>
+    {% endfor %}
+  </div>
+
+
+    {% else %}
+      <!-- Empty state -->
+      <div class="text-center py-20">
+        <p class="text-5xl mb-4">🍽️</p>
+        <p class="text-gray-500 text-lg">No dishes found.</p>
+        {% if search_query %}
+          <a href="{% url 'menu' %}" class="mt-4 inline-block text-orange-500 hover:underline">Clear search</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+  function addToCart(id, name, price) {
+    // Placeholder — we'll wire this up properly when we build the cart
+    alert(name + ' added to cart! (Cart coming soon)')
+  }
+</script>
+{% endblock maincontent %}
